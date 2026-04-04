@@ -12,7 +12,7 @@ def compute_group_normalized_rewards(
                                     normalize_by_std: bool,
                                     ) -> tuple[torch.Tensor, torch.Tensor, dict[str, float]]:
     
-    raw_rewards: list[float] = [reward_fn(response, ground_truth)['raw_reward'] for response, ground_truth in zip(rollout_responses, repeated_ground_truths, strict=True)]
+    raw_rewards: list[float] = [reward_fn(response, ground_truth)['reward'] for response, ground_truth in zip(rollout_responses, repeated_ground_truths, strict=True)]
     assert len(raw_rewards) % group_size == 0
     
     advantages: list[float] = []

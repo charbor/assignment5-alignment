@@ -2,6 +2,7 @@ from typing import Callable, Literal
 
 import torch 
 import numpy as np
+from jaxtyping import Float
 
 def compute_group_normalized_rewards(
                                     reward_fn: Callable[[str, str], dict[str, float]],
@@ -31,6 +32,21 @@ def compute_naive_policy_gradient_loss(
         policy_log_probs: torch.Tensor,
 ) -> torch.Tensor:
     return - policy_log_probs * raw_rewards_or_advantages
+
+def compute_grpo_clip_loss(
+        advantages: Float[torch.Tensor, "batch 1"], # batch_size, 1
+        policy_log_probs: Float[torch.Tensor, "batch seq"], # batch_size seq_len
+        old_log_probs: Float[torch.Tensor, "batch seq"], # batch_size seq_len
+        cliprange: float
+        ) -> tuple[Float[torch.Tensor, "batch seq"], dict[str, torch.Tensor]]: 
+    
+    policy_ratio = torch.exp(policy_log_probs - old_log_probs)
+    clipped_advantages = torch.where(advantages >= 0, (1 + cliprange) * advantages, (1 - cliprange) * advantages)
+
+    token_losses: Float[torch.Tensor, "batch seq"] = - torch.min(policy_ratio * advantages, clipped_advantages)
+    return token_losses, {}
+
+
 
 
 def masked_mean(tensor: torch.Tensor,

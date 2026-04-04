@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Literal
 
 import torch 
 import numpy as np
@@ -26,10 +26,29 @@ def compute_group_normalized_rewards(
 
     return torch.tensor(advantages), torch.Tensor(raw_rewards), {}
 
+def compute_naive_policy_gradient_loss(
+        raw_rewards_or_advantages: torch.Tensor,
+        policy_log_probs: torch.Tensor,
+) -> torch.Tensor:
+    return - policy_log_probs * raw_rewards_or_advantages
+
+
 def masked_mean(tensor: torch.Tensor,
                 mask: torch.Tensor,
                 dim: int | None = None):
     return torch.sum(tensor * mask, dim = dim) / torch.sum(mask, dim=dim)
 
     
-    
+def grpo_minibatch_train_step(
+        policy_log_probs: torch.Tensor,
+        response_mask: torch.Tensor,
+        gradient_accumulation_steps: int,
+        loss_type: Literal['no_baseline', 'reinforce_with_baseline', 'grpo_clip'],
+        raw_rewards: torch.Tensor | None = None,
+        advantages: torch.Tensor | None = None,
+        old_log_probs: torch.Tensor | None = None,
+) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+    '''Forward and backwards pass on microbatch.
+    Return loss, metadata
+    '''
+    advantages, rewards, meta_data = compute_group_normalized_rewards()

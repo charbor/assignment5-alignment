@@ -20,7 +20,7 @@ def compute_group_normalized_rewards(
     for group_idx in range(num_groups):
         group_rewards = raw_rewards[group_idx*group_size: (group_idx+1) * group_size]
         mean = sum(group_rewards) / group_size
-        denom = np.std(group_rewards) + advantage_eps if normalize_by_std else 1
+        denom = np.std(group_rewards, ddof=1) + advantage_eps if normalize_by_std else 1
 
         advantages.extend([(reward - mean) / denom for reward in group_rewards])
 

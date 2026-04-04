@@ -89,4 +89,4 @@ def grpo_minibatch_train_step(
     '''Forward and backwards pass on microbatch.
     Return loss, metadata
     '''
-    advantages, rewards, meta_data = compute_group_normalized_rewards()
+    pass

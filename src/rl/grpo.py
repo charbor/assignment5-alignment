@@ -47,7 +47,29 @@ def compute_grpo_clip_loss(
     return token_losses, {}
 
 
+def compute_policy_gradient_loss(
+        policy_log_probs: Float[torch.Tensor, "batch seq"],
+        loss_type: Literal['no_baseline', 'reinforce_with_baseline', 'grpo_clip'],
+        raw_rewards: Float[torch.Tensor, "batch 1"] | None = None,
+        advantages: Float[torch.Tensor, 'batch 1'] | None = None,
+        old_log_probs: Float[torch.Tensor, "batch seq"] | None = None,
+        cliprange: float | None = None
+) -> tuple[Float[torch.Tensor, 'batch seq'], dict[str, torch.Tensor]]:
+    match loss_type:
+        case 'no_baseline':
+            assert raw_rewards is not None
+            return compute_naive_policy_gradient_loss(raw_rewards, policy_log_probs), {}
+        case 'reinforce_with_baseline':
+            assert advantages is not None
+            return compute_naive_policy_gradient_loss(advantages, policy_log_probs), {}
+        case 'grpo_clip':
+            assert advantages is not None and old_log_probs is not None and cliprange is not None
+            return compute_grpo_clip_loss(advantages, policy_log_probs, old_log_probs, cliprange)
+    raise ValueError(f"Unknown loss_type: {loss_type}")
 
+
+    
+    
 
 def masked_mean(tensor: torch.Tensor,
                 mask: torch.Tensor,

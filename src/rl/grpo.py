@@ -1,8 +1,10 @@
+from typing import Callable
+
 import torch 
 import numpy as np
 
 def compute_group_normalized_rewards(
-                                    reward_fn: callable[[str, str], dict[str, float]],
+                                    reward_fn: Callable[[str, str], dict[str, float]],
                                     rollout_responses: list[str],
                                     repeated_ground_truths: list[str],
                                     group_size: int,

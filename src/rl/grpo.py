@@ -34,9 +34,9 @@ def compute_naive_policy_gradient_loss(
     return - policy_log_probs * raw_rewards_or_advantages
 
 def compute_grpo_clip_loss(
-        advantages: Float[torch.Tensor, "batch 1"], # batch_size, 1
-        policy_log_probs: Float[torch.Tensor, "batch seq"], # batch_size seq_len
-        old_log_probs: Float[torch.Tensor, "batch seq"], # batch_size seq_len
+        advantages: Float[torch.Tensor, "batch 1"],
+        policy_log_probs: Float[torch.Tensor, "batch seq"],
+        old_log_probs: Float[torch.Tensor, "batch seq"],
         cliprange: float
         ) -> tuple[Float[torch.Tensor, "batch seq"], dict[str, torch.Tensor]]: 
     

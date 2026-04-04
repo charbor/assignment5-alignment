@@ -26,7 +26,10 @@ def compute_group_normalized_rewards(
 
     return torch.tensor(advantages), torch.Tensor(raw_rewards), {}
 
-    
+def masked_mean(tensor: torch.Tensor,
+                mask: torch.Tensor,
+                dim: int | None = None):
+    return torch.sum(tensor * mask, dim = dim) / torch.sum(mask, dim=dim)
 
     
     

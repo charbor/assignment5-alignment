@@ -77,12 +77,18 @@ def run_compute_group_normalized_rewards(
                 You may choose what you wish to log here
                 (some statistics of the rewards, etc.).
     """
-    raise NotImplementedError
+    from src.grpo.nn import compute_group_normalized_rewards
+    return compute_group_normalized_rewards(
+        reward_fn=reward_fn, rollout_responses=rollout_responses,
+        repeated_ground_truths=repeated_ground_truths, group_size=group_size,
+        advantage_eps=advantage_eps, normalize_by_std=normalize_by_std,
+    )
 
 
 def run_compute_entropy(logits: torch.Tensor) -> torch.Tensor:
     """Get the entropy of the logits (i.e., entropy of the final dimension)."""
-    raise NotImplementedError
+    from src.sft.nn import compute_entropy
+    return compute_entropy(logits)
 
 
 def run_get_response_log_probs(
@@ -130,10 +136,14 @@ def run_compute_naive_policy_gradient_loss(
             the log-probs of the policy.
 
     Returns:
-        torch.Tensor of shape (batch_size, sequence_length): 
+        torch.Tensor of shape (batch_size, sequence_length):
             the policy gradient per-token loss.
     """
-    raise NotImplementedError
+    from src.grpo.nn import compute_naive_policy_gradient_loss
+    return compute_naive_policy_gradient_loss(
+        raw_rewards_or_advantages=raw_rewards_or_advantages,
+        policy_log_probs=policy_log_probs,
+    )
 
 
 def run_compute_grpo_clip_loss(
@@ -267,7 +277,8 @@ def run_masked_normalize(
         torch.Tensor, the normalized sum, where masked elements
             (mask=0) don't contribute to the sum.
     """
-    raise NotImplementedError
+    from src.sft.nn import masked_normalize
+    return masked_normalize(tensor=tensor, mask=mask, dim=dim, normalize_constant=normalize_constant)
 
 
 """

@@ -42,7 +42,7 @@ def run_compute_group_normalized_rewards(
     advantage_eps: float,
     normalize_by_std: bool,
 ) -> tuple[torch.Tensor, dict[str, float]]:
-    from src.rl.grpo import compute_group_normalized_rewards
+    from src.grpo.nn import compute_group_normalized_rewards
     return compute_group_normalized_rewards(
         reward_fn=reward_fn,
         rollout_responses=rollout_responses,
@@ -94,7 +94,7 @@ def run_compute_naive_policy_gradient_loss(
     raw_rewards_or_advantages: torch.Tensor,
     policy_log_probs: torch.Tensor,
 ) -> torch.Tensor:
-    from src.rl.grpo import compute_naive_policy_gradient_loss
+    from src.grpo.nn import compute_naive_policy_gradient_loss
     return compute_naive_policy_gradient_loss(
         raw_rewards_or_advantages=raw_rewards_or_advantages,
         policy_log_probs=policy_log_probs,
@@ -107,7 +107,7 @@ def run_compute_grpo_clip_loss(
     old_log_probs: torch.Tensor,
     cliprange: float,
 ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
-    from src.rl.grpo import compute_grpo_clip_loss
+    from src.grpo.nn import compute_grpo_clip_loss
     return compute_grpo_clip_loss(
         advantages=advantages,
         policy_log_probs=policy_log_probs,
@@ -124,7 +124,7 @@ def run_compute_policy_gradient_loss(
     old_log_probs: torch.Tensor,
     cliprange: float,
 ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
-    from src.rl.grpo import compute_policy_gradient_loss
+    from src.grpo.nn import compute_policy_gradient_loss
     return compute_policy_gradient_loss(
         policy_log_probs=policy_log_probs,
         loss_type=loss_type,
@@ -136,7 +136,7 @@ def run_compute_policy_gradient_loss(
 
 
 def run_masked_mean(tensor: torch.Tensor, mask: torch.Tensor, dim: int | None = None) -> torch.Tensor:
-    from src.rl.grpo import masked_mean
+    from src.grpo.nn import masked_mean
     return masked_mean(tensor, mask, dim=dim)
 
 def run_sft_microbatch_train_step(
@@ -160,7 +160,7 @@ def run_grpo_microbatch_train_step(
     old_log_probs: torch.Tensor | None = None,
     cliprange: float | None = None,
 ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
-    from src.rl.grpo import grpo_minibatch_train_step
+    from src.grpo.nn import grpo_minibatch_train_step
     return grpo_minibatch_train_step(
         policy_log_probs=policy_log_probs,
         response_mask=response_mask,

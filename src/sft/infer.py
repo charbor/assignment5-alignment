@@ -57,7 +57,7 @@ if __name__ == "__main__":
     # save results
     import json, os, time
 
-    out_dir = "/workspace/results"
+    out_dir = "/root/results"
     os.makedirs(out_dir, exist_ok=True)
     out_path = f"{out_dir}/gsm8k_baseline_{int(time.time())}.jsonl"
     with open(out_path, "w") as f:
